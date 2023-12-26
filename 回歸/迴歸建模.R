@@ -130,3 +130,24 @@ subsets(subx,statistic="adjr2",min.size=4, max.size=6)
 #abline(a=0,b=1)
 #subsets(subx,statistic="cp",min.size=8, max.size=9)
 #abline(a=0,b=1)
+
+#逐步回歸
+s1=step(M2) #預設是用AIC
+s2=step(M2,k=log(dim(Train)[1])) #改成用BIC
+
+
+M2a=lm(log(Stime)~AU+BCS+PI+ET+LT,data=Train)
+summary(M2a)
+M2b=lm(log(Stime)~AU+BCS+PI+ET,data=Train)
+summary(M2b)
+M2br = lm(log(Stime)~BCS+PI+ET,data=Train) #拿掉不顯著(可能可以拿掉)的AU
+anova(M2b, M2br) 
+#去做general linear test(拿掉一個變數的reduced model 和原本的full model比)
+#此處是在檢驗AU的dummy variable是否同時為零
+
+#M2b or M2a can be our final model
+
+#Outliers might existed
+vif(M1)
+vif(M2a)
+vif(M2b) #檢測共線性是否太過嚴重，看該模型vif有沒有超過10
