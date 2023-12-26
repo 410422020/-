@@ -85,3 +85,32 @@ runs.test(es)
 # H0: 殘差是隨機的  H1: 殘差不是隨機的
 
 #結論: 四大基本假設除了隨機性，其餘的齊一性、常態性、和函數形式皆有問題
+
+#Phase V : 矯正和做變數選擇，Refined and extend the model
+#Step 1:矯正
+library(MASS)
+boxcox(M1) #取靠近極值，更好解釋的那個
+
+#Stime1=log(Stime)，選擇取log
+M2=lm(log(Stime)~.,data=Train)
+summary(M2) #新模型
+
+#再做一次第四步的診斷
+#e2=residuals(M2)
+e2s=rstandard(M2)
+yhat2=fitted.values(M2)
+plot(yhat2,e2s)
+abline(h=0,col=2)
+residualPlot(M2,type="rstandard",quadratic=F)
+
+resettest(M2,power=2,type='regressor')
+ncvTest(M2)#This test is often called the Breusch-Pagan test; 
+
+qqPlot(M2)
+lillie.test(e2s)#KS test for normality
+shapiro.test(e2s)#Shapiro-Wilk Normality Test
+
+plot(e2s,type = "l",col='2')
+acf(e2s,ci=0.99)
+#dwtest(M2)#Durbin-Watson test
+runs.test(es)
