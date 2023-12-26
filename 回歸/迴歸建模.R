@@ -179,3 +179,19 @@ MAPE2b=mean(abs(r2b/Test$Stime))
 
 #according to our validation result
 #our final model is m2b
+
+#Step 2: 解釋這個模型的意義和其預測的價值
+summary(M2b)
+confint(M2b)
+#the meaning of coefficients
+#R2=0.78
+#MAE=103,MAPE.....
+
+p1 <- predict(M2a,newdata = Test,interval="confidence",level=0.99) #預測平均值的CI
+p2 <- predict(M2a,newdata = Test,interval="prediction",level=0.99) #預測單一值的CI
+
+p1f <- exp(p1)
+p2f <- exp(p2) #把之前轉換過的資料調整回來
+
+contrasts(AU)
+#type <- relevel(type,ref="prof")
