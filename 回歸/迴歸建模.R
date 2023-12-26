@@ -114,3 +114,19 @@ plot(e2s,type = "l",col='2')
 acf(e2s,ci=0.99)
 #dwtest(M2)#Durbin-Watson test
 runs.test(es)
+
+#Step 2 :做變數的選擇，用逐步回歸或是criteria
+#criteria
+library(leaps)
+subx=regsubsets(log(Stime)~., nbest=3, data=Train)
+
+subsets(subx,statistic="bic")
+subsets(subx,statistic="bic",min.size=3, max.size=6)
+
+subsets(subx,statistic="adjr2", legend=F)
+subsets(subx,statistic="adjr2",min.size=4, max.size=6)
+
+#subsets(subx,statistic="cp")
+#abline(a=0,b=1)
+#subsets(subx,statistic="cp",min.size=8, max.size=9)
+#abline(a=0,b=1)
