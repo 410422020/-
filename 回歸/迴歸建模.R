@@ -151,3 +151,31 @@ anova(M2b, M2br)
 vif(M1)
 vif(M2a)
 vif(M2b) #檢測共線性是否太過嚴重，看該模型vif有沒有超過10
+
+
+#Phase VI :有效性的評估 (MSE、RMSE、MAE、MAPE)
+#Step 1:用有效性的四個指標來決定最終採用的模型
+M1p=predict(M1, newdata=Test) #用一開始保留的Test 資料做評估
+r1=M1p-Test$Stime
+MSE1=mean(r1^2)
+RMSE1 = sqrt(MSE1)
+MAE1 = mean(abs(r1))
+MAPE1=mean(abs(r1/Test$Stime))
+
+M2ap=predict(M2a, newdata=Test)
+r2a=exp(M2ap)-Test$Stime 
+#注意! 因為我們在建M2a模時資料有經過log轉換，所以要注意要先換回去才能跟保留的原始資料比
+MSE2a=mean(r2a^2)
+RMSE2a = sqrt(MSE2a)
+MAE2a = mean(abs(r2a))
+MAPE2a=mean(abs(r2a/Test$Stime))
+
+M2bp=predict(M2b, newdata=Test)
+r2b=exp(M2bp)-Test$Stime
+MSE2b=mean(r2b^2)
+RMSE2b = sqrt(MSE2b)
+MAE2b = mean(abs(r2b))
+MAPE2b=mean(abs(r2b/Test$Stime))
+
+#according to our validation result
+#our final model is m2b
